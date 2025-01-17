@@ -22,7 +22,11 @@ import (
 	"github.com/srl-labs/containerlab/utils"
 )
 
-const CLAB_AUTHORISED_GROUP = "clab_admins"
+const (
+	CLAB_AUTHORISED_GROUP = "clab_admins"
+	ROOT_UID              = 0
+	NOMODIFY              = -1
+)
 
 var (
 	debugCount int
@@ -122,7 +126,7 @@ func checkAndGetRootPrivs(_ *cobra.Command, _ []string) error {
 
 func obtainRootPrivs() error {
 	// Escalate to root privileges, changing saved UIDs to root/current group to be able to retain privilege escalation
-	err := changePrivileges(0, os.Getgid(), 0, os.Getgid())
+	err := changePrivileges(ROOT_UID, os.Getgid(), ROOT_UID, os.Getgid())
 	if err != nil {
 		return err
 	}
@@ -134,7 +138,7 @@ func obtainRootPrivs() error {
 
 func dropRootPrivs() error {
 	// Drop privileges to the running user, retaining current saved IDs
-	err := changePrivileges(os.Getuid(), os.Getgid(), -1, -1)
+	err := changePrivileges(os.Getuid(), os.Getgid(), NOMODIFY, NOMODIFY)
 	if err != nil {
 		return err
 	}
@@ -145,10 +149,10 @@ func dropRootPrivs() error {
 }
 
 func changePrivileges(new_uid, new_gid, saved_uid, saved_gid int) error {
-	if err := unix.Setresuid(-1, new_uid, saved_uid); err != nil {
+	if err := unix.Setresuid(NOMODIFY, new_uid, saved_uid); err != nil {
 		return fmt.Errorf("failed to set UID: %v", err)
 	}
-	if err := unix.Setresgid(-1, new_gid, saved_gid); err != nil {
+	if err := unix.Setresgid(NOMODIFY, new_gid, saved_gid); err != nil {
 		return fmt.Errorf("failed to set GID: %v", err)
 	}
 	log.Debugf("Changed running UIDs to UID: %d GID: %d", new_uid, new_gid)
