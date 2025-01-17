@@ -12,7 +12,7 @@ var redeployCmd = &cobra.Command{
 	Short:        "destroy and redeploy a lab",
 	Long:         "destroy a lab and deploy it again based on the topology definition file\nreference: https://containerlab.dev/cmd/redeploy/",
 	Aliases:      []string{"rdep"},
-	PreRunE:      sudoCheck,
+	PreRunE:      checkAndGetRootPrivs,
 	SilenceUsage: true,
 	RunE:         redeployFn,
 }

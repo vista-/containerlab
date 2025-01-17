@@ -37,7 +37,6 @@ var inspectCmd = &cobra.Command{
 	Short:   "inspect lab details",
 	Long:    "show details about a particular lab or all running labs\nreference: https://containerlab.dev/cmd/inspect/",
 	Aliases: []string{"ins", "i"},
-	PreRunE: sudoCheck,
 	RunE:    inspectFn,
 }
 

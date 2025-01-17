@@ -20,7 +20,7 @@ var downloadURL = "https://github.com/srl-labs/containerlab/raw/main/get.sh"
 var upgradeCmd = &cobra.Command{
 	Use:     "upgrade",
 	Short:   "upgrade containerlab to latest available version",
-	PreRunE: sudoCheck,
+	PreRunE: checkAndGetRootPrivs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		f, err := os.CreateTemp("", "containerlab")
 		defer os.Remove(f.Name())

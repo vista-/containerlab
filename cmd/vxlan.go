@@ -54,8 +54,9 @@ var vxlanCmd = &cobra.Command{
 }
 
 var vxlanCreateCmd = &cobra.Command{
-	Use:   "create",
-	Short: "create vxlan interface",
+	Use:     "create",
+	Short:   "create vxlan interface",
+	PreRunE: checkAndGetRootPrivs,
 	RunE: func(_ *cobra.Command, _ []string) error {
 		ctx := context.Background()
 
@@ -118,8 +119,9 @@ var vxlanCreateCmd = &cobra.Command{
 }
 
 var vxlanDeleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "delete vxlan interface",
+	Use:     "delete",
+	Short:   "delete vxlan interface",
+	PreRunE: checkAndGetRootPrivs,
 	RunE: func(_ *cobra.Command, _ []string) error {
 		var ls []netlink.Link
 		var err error

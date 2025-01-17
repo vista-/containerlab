@@ -43,8 +43,9 @@ var vethCmd = &cobra.Command{
 }
 
 var vethCreateCmd = &cobra.Command{
-	Use:   "create",
-	Short: "Create a veth interface and attach its sides to the specified containers",
+	Use:     "create",
+	Short:   "Create a veth interface and attach its sides to the specified containers",
+	PreRunE: checkAndGetRootPrivs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 
